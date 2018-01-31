@@ -22,7 +22,7 @@ pod 'ScaledCarouselLayout'
 
 ## Author
 
-Meggapixxel, NexusFive5
+Meggapixxel, zhydenkodeveloper@gmail.com
 
 ## License
 

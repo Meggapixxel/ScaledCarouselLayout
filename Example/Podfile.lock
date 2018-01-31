@@ -1,0 +1,16 @@
+PODS:
+  - ScaledCarouselLayout (0.1.0)
+
+DEPENDENCIES:
+  - ScaledCarouselLayout (from `../`)
+
+EXTERNAL SOURCES:
+  ScaledCarouselLayout:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ScaledCarouselLayout: 507babe955bc907c5265f4d910f71ae31c317439
+
+PODFILE CHECKSUM: 87bc31143aa2d029ffd7b605842de7a8fc60f7b6
+
+COCOAPODS: 1.4.0
