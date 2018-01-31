@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ScaledCarouselLayout_Example' do
+  pod 'ScaledCarouselLayout', :path => '../'
+
+  target 'ScaledCarouselLayout_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
