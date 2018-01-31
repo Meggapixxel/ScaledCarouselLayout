@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name             = 'ScaledCarouselLayout'
   s.version          = '0.1.0'
   s.summary          = 'ScaledCarouselLayout for UICollectionView with easy use'
-  s.screenshot       = 'https://github.com/Meggapixxel/ScaledCarouselLayout/blob/master/Example1.gif'
+  s.screenshots      = 'https://raw.githubusercontent.com/Meggapixxel/ScaledCarouselLayout/master/Example1.gif'
   s.description      = <<-DESC
   ScaledCarouselLayout includes storyboard configs:
   - horizontal/vertical scroll direction
