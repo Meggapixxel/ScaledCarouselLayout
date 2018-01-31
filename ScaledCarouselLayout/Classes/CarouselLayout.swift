@@ -18,7 +18,7 @@ enum CarouselDirection {
     
 }
 
-class CarouselLayout: UICollectionViewLayout {
+public class CarouselLayout: UICollectionViewLayout {
     
     @IBInspectable fileprivate var horizontal: Bool = false
     
@@ -38,7 +38,7 @@ class CarouselLayout: UICollectionViewLayout {
     private var layoutInformation = [UICollectionViewLayoutAttributes]()
     private var currentVisibleRect: CGRect = .zero
     
-    override var collectionViewContentSize: CGSize {
+    override public var collectionViewContentSize: CGSize {
         let numberOfItems = collectionView!.numberOfItems(inSection: 0)
         if horizontal {
             let sideSpace = (collectionView!.bounds.width - centerWidth) / 2
@@ -51,7 +51,7 @@ class CarouselLayout: UICollectionViewLayout {
         }
     }
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         centerHeight = collectionView!.frame.height * aspectCenterHeight
         normalHeight = collectionView!.frame.height * aspectNormalHeight
@@ -61,7 +61,7 @@ class CarouselLayout: UICollectionViewLayout {
         deltaY = centerHeight - normalHeight
     }
     
-    override func prepare() {
+    override public func prepare() {
         let numberOfItems = collectionView!.numberOfItems(inSection: 0)
         if layoutInformation.count != numberOfItems {
             layoutInformation = (0..<numberOfItems).map {
@@ -73,20 +73,20 @@ class CarouselLayout: UICollectionViewLayout {
         }
     }
     
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    override public func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return layoutInformation[indexPath.item]
     }
     
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override public func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         return layoutInformation.filter { $0.frame.intersects(rect) }
     }
     
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         currentVisibleRect = newBounds
         return !isIgnoringBoundsChange
     }
     
-    func updateLayout(for newBounds: CGRect) {
+    public func updateLayout(for newBounds: CGRect) {
         if horizontal {
             updateHorizontalLayout(for: newBounds)
         } else {
@@ -94,7 +94,7 @@ class CarouselLayout: UICollectionViewLayout {
         }
     }
     
-    func updateHorizontalLayout(for newBounds: CGRect) {
+    public func updateHorizontalLayout(for newBounds: CGRect) {
         let leftInset = (newBounds.width - centerWidth) / 2
         let normalOffsetY = (newBounds.height - normalHeight) / 2
         for attribute in layoutInformation {
@@ -105,7 +105,7 @@ class CarouselLayout: UICollectionViewLayout {
         }
     }
     
-    func updateVerticalLayout(for newBounds: CGRect) {
+    public func updateVerticalLayout(for newBounds: CGRect) {
         let topInset = (newBounds.height - centerHeight) / 2
         let normalOffsetX = (newBounds.width - normalWidth) / 2
         for attribute in layoutInformation {
@@ -116,7 +116,7 @@ class CarouselLayout: UICollectionViewLayout {
         }
     }
     
-    func update(_ attr: UICollectionViewLayoutAttributes, _ center: CGFloat, _ normalX: CGFloat, _ normalY: CGFloat) {
+    public func update(_ attr: UICollectionViewLayoutAttributes, _ center: CGFloat, _ normalX: CGFloat, _ normalY: CGFloat) {
         let isCenter = fabs(center) < 1
         if isCenter {
             let koef = 1 - fabs(center)
@@ -140,7 +140,7 @@ class CarouselLayout: UICollectionViewLayout {
 
 extension CarouselLayout {
     
-    func nearestIndex(_ point: CGPoint, _ direction: CarouselDirection, _ horizontal: Bool) -> Int {
+    fileprivate func nearestIndex(_ point: CGPoint, _ direction: CarouselDirection, _ horizontal: Bool) -> Int {
         switch direction {
         case .any:
             let coord = horizontal ? point.x : point.y
@@ -156,12 +156,12 @@ extension CarouselLayout {
         }
     }
     
-    func offset(for index: Int, _ horizontal: Bool) -> CGPoint {
+    fileprivate func offset(for index: Int, _ horizontal: Bool) -> CGPoint {
         return CGPoint(x: CGFloat(index) * (horizontal ? self.normalWidth : 0),
                        y: CGFloat(index) * (horizontal ? 0 : self.normalHeight))
     }
     
-    func index(for center: CGFloat, direction: CarouselDirection) -> Int {
+    fileprivate func index(for center: CGFloat, direction: CarouselDirection) -> Int {
         let size = collectionView!.bounds.size
         switch direction {
         case .top:
@@ -176,7 +176,7 @@ extension CarouselLayout {
         }
     }
     
-    func distance(_ index: Int, _ center: CGFloat, direction: CarouselDirection) -> CGFloat {
+    fileprivate func distance(_ index: Int, _ center: CGFloat, direction: CarouselDirection) -> CGFloat {
         let size = collectionView!.bounds.size
         switch direction {
         case .top:
@@ -193,9 +193,9 @@ extension CarouselLayout {
     
 }
 
-class CarouselLayoutVC: UIViewController, UICollectionViewDelegate {
+open class CarouselLayoutVC: UIViewController, UICollectionViewDelegate {
     
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    open func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         guard let cell = scrollView.subviews.first(where: { $0.isKind(of: UICollectionViewCell.self) }) as? UICollectionViewCell,
             let collectionView = cell.superview as? UICollectionView,
             let layout = collectionView.collectionViewLayout as? CarouselLayout else { return }
@@ -207,7 +207,7 @@ class CarouselLayoutVC: UIViewController, UICollectionViewDelegate {
         targetContentOffset.pointee = layout.offset(for: nearsetIndex, layout.horizontal)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let layout = collectionView.collectionViewLayout as? CarouselLayout else { return }
         let position = CGFloat(indexPath.row) * (layout.horizontal ? layout.normalWidth : layout.normalHeight)
         layout.isIgnoringBoundsChange = true
